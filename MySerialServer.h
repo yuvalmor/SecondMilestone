@@ -1,7 +1,6 @@
 #ifndef SECONDMILESTONE_MYSERIALSERVER_H
 #define SECONDMILESTONE_MYSERIALSERVER_H
 
-#include "ServerSide.h"
 #include <iostream>
 using namespace server_side;
 using namespace std;
