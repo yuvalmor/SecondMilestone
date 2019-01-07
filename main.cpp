@@ -1,7 +1,9 @@
 #include <iostream>
-using namespace std;
+#include "MySerialServer.h"
+#include "ServerSide.h"
+using namespace server_side;
 
 int main() {
-    cout << "ok" <<endl;
-    return 0;
+   Server* server = new MySerialServer();
+   return 0;
 }
