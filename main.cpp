@@ -1,6 +1,7 @@
 #include <iostream>
+using namespace std;
 
 int main() {
-    std::cout << "yuval" << std::endl;
+    cout << "ok" <<endl;
     return 0;
 }
