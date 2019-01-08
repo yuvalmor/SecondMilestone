@@ -1,14 +1,8 @@
 #include <iostream>
 #include "MySerialServer.h"
-
-namespace server_side{
-    class Server{
-    public:
-        virtual void open(int port)=0;
-        virtual void stop()=0;
-    };
-}
+using namespace server_side;
 
 int main() {
-   return 0;
+    Server* server = new MySerialServer();
+    return 0;
 }
