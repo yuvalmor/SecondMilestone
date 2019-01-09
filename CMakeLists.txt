@@ -9,4 +9,7 @@ add_executable(SecondMilestone
         Searchable.h
         PriorityQueue.h
         State.h
+        Solution.h
+        BestFirstSearch.h
         )
+
