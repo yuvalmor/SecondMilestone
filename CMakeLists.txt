@@ -3,4 +3,13 @@ project(SecondMilestone)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(SecondMilestone main.cpp MySerialServer.cpp MySerialServer.h)
+add_executable(SecondMilestone
+        main.cpp
+        Searcher.h
+        Searchable.h
+        PriorityQueue.h
+        State.h
+        Solution.h
+        BestFirstSearch.h
+        )
+
