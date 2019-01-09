@@ -2,7 +2,7 @@
 #define SECONDMILESTONE_CLIENTHANDLER_H
 
 class ClientHandler{
-    
+
 };
 
 #endif //SECONDMILESTONE_CLIENTHANDLER_H
