@@ -11,5 +11,6 @@ add_executable(SecondMilestone
         ClientHandler.h
         MyClientHandler.h
         MyClientHandler.cpp
+        CacheManager.h
         )
 

@@ -51,9 +51,9 @@ void MyClientHandler::handleClient(int socket) {
         }
         cout << "line = " << line <<endl;
     } while (line != END_OF_INPUT);
-    vector<double> endLocation = this->matrix.at(matrix.size()-1);
+    this->end = this->matrix.at(matrix.size()-1);
     this->matrix.pop_back();
-    vector<double> startLocation = this->matrix.at(matrix.size()-1);
+    this->initial = this->matrix.at(matrix.size()-1);
     this->matrix.pop_back();
     cout << "done" <<endl;
 }

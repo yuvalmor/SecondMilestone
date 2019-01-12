@@ -8,6 +8,8 @@ using namespace std;
 
 class MyClientHandler:public ClientHandler{
     vector<vector<double>> matrix;
+    vector<double> initial;
+    vector<double> end;
 public:
     vector<double> matrixLine(string line);
     string splitString(char* str, int size);
