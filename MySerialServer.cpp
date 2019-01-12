@@ -1,23 +1,13 @@
 #define BUFFER_SIZE 256
 #include "MySerialServer.h"
+#include <chrono>
 
-void Error(const char* errorMassage){
-    perror(errorMassage);
-    exit(1);
-}
-
-void MySerialServer::open(int portNum) {
+void MySerialServer::open(int portNum, ClientHandler* clientHandler) {
+    this->toListen=true;
     // The variables store the values returned by the socket and accept system calls
     int sockfd, newsockfd;
-    /*
-    // Store the port number on which the server accepts connections
-    int pronto;*/
     // Store the size of the address of the client
     int clilen;
-    // Contains the number of characters read or written
-    int n;
-    // The server reads characters from the socket connection into this buffer
-    char buffer[BUFFER_SIZE];
     struct sockaddr_in serv_addr, cli_addr;
     // The socket system call creates new socket
     sockfd = socket(AF_INET,SOCK_STREAM,0);
@@ -33,20 +23,39 @@ void MySerialServer::open(int portNum) {
     if(bind(sockfd,(struct sockaddr*)&serv_addr, sizeof(serv_addr))<0){
         Error("Error in binding");
     }
-    listen(sockfd,5);
+
+
+    // until here we opened the server and the sockets!!!!!!!!!!!!
+    listen(sockfd,1);
     clilen = sizeof(cli_addr);
     newsockfd = accept(sockfd,(struct sockaddr*)&cli_addr,(socklen_t*)&clilen);
-    if(newsockfd<0){
+    if(newsockfd < 0){
+        close(sockfd);
         Error("Error on accept");
     }
-    bzero(buffer,BUFFER_SIZE);
-    n=read(newsockfd,buffer, sizeof(buffer)-1);
-    if(n<0){
-        Error("Error reading from socket");
+    clientHandler->handleClient(newsockfd);
+    timeval timeout;
+    fd_set fs;
+    FD_ZERO(&fs);
+    FD_SET(sockfd,&fs);
+    timeout.tv_sec = 5;
+    timeout.tv_usec = 0;
+    while (this->toListen && select(sockfd+1,&fs, nullptr, nullptr,&timeout)){
+        newsockfd = accept(sockfd,(struct sockaddr*)&cli_addr,(socklen_t*)&clilen);
+        if(newsockfd < 0){
+            close(sockfd);
+            if(errno == EWOULDBLOCK){
+                this->stop();
+                Error("Time out! \n");
+            }
+            Error("Error on accept");
+        }
+        clientHandler->handleClient(newsockfd);
+        cout << "im done with client handler!!" <<endl;
     }
-    printf("massage %s\n",buffer);
+    close(newsockfd);
 }
 
 void MySerialServer::stop() {
-    cout << "stop the program" <<endl;
+    this->toListen = false;
 }

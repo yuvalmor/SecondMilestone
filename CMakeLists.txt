@@ -5,18 +5,11 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(SecondMilestone
         main.cpp
+        ServerSide.h
         MySerialServer.h
         MySerialServer.cpp
-        Searcher.h
-        Searchable.h
-        PriorityQueue.h
-        State.h
-        Solution.h
         ClientHandler.h
         MyClientHandler.h
         MyClientHandler.cpp
-        MyParallelServer.h
-        MyParallelServer.cpp
-        CacheManager.h
         )
 
