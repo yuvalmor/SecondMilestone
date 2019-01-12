@@ -20,14 +20,14 @@ public:
 
     // define matrix size
 
-    Matrices(vector<vector<double>> input, T initial, T goal) {
+    Matrices(const vector<vector<double>>& input, T initial, T goal) {
 
-        this->size = (int) input.size();
+        this->size = (int)input.size();
 
-        this->matrix.resize(this->size);
+        this->matrix.resize(input.size());
         for (int i = 0; i < this->size; i++) {
             vector<State<T>> col;
-            col.resize(this->size, State<T>());
+            col.resize(input.size(), State<T>());
             this->matrix[i] = col;
         }
 

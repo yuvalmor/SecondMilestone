@@ -112,9 +112,7 @@ public:
         this->evaluatedNodes++;
 
         // get that top priority state from the queue
-        this->openQueue.top();
-        State<T> s;
-        s = this->openQueue.top();
+        State<T> s = this->openQueue.top();
 
         // remove the best state from the queue
         this->openQueue.pop();
