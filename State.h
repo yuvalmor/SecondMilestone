@@ -11,6 +11,7 @@ template <class T>
 class State {
 
 private:
+
     T state;
     double cost;
     State<T>* cameFrom;
@@ -24,11 +25,20 @@ public:
     }
 
     double getCost() const {
+        return this->cost;
+    }
+
+    State<T>* getCameFrom() const {
+        return this->cameFrom;
+    }
+
+    double getPathCost() const {
         if (nullptr == this->cameFrom) {
-            return this->cost;
+            return getCost();
         } else {
-            return this->cameFrom->getCost() +this->cost;
+            return this->cameFrom->cost + getCost();
         }
+
     }
 
     void setState(T s){
