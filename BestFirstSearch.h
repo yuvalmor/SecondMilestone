@@ -22,6 +22,9 @@ public:
         // initialize member 'openQueue' (priority Queue) with A
         CommonSearcher<T>::addToOpenQueue(s->getInitialState());
 
+        // initialize solution
+        Solution<T> sol;
+
         // loop over openQueue states
         while (CommonSearcher<T>::openQueueSize() > 0) {
 
@@ -35,7 +38,6 @@ public:
             // check if the current state is the goal.
             // if yes return path (or path cost)
             if (n->Equals(s->isStateGoal(*n))) {
-                Solution<T> sol;
                 sol.setSolution(getSolution(s));
                 return sol;
             }
@@ -74,6 +76,7 @@ public:
 
             }
         }
+        return sol;
     }
 
     bool isStateInClosedQueue(State<T> s) {

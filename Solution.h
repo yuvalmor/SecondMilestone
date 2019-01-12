@@ -24,7 +24,10 @@ public:
         this->solution = "";
     }
 
-    string getSolution() const {
+    string getSolution() {
+        if (this->solution.size() == 0) {
+            this->solution = "{}";
+        }
         return this->solution;
     }
 

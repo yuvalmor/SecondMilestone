@@ -11,9 +11,11 @@ template <class T>
 class Matrices : public Searchable<T> {
 
 private:
+
     vector<vector<State<T>>> matrix;
     State<T> initial;
     State<T> goal;
+
     int size;
 
 public:
@@ -83,23 +85,35 @@ public:
 
         // down
         if (row < this->size-1) {
-            neighbors.insert(this->matrix[row + 1][column]);
+            State<T> nd = this->matrix[row + 1][column];
+            if (nd.getCost() != -1) {
+                neighbors.insert(nd);
+            }
         }
 
         // up
         if (row >0) {
-            neighbors.insert(this->matrix[row - 1][column]);
+            State<T> nu = this->matrix[row - 1][column];
+            if (nu.getCost() != -1) {
+                neighbors.insert(nu);
+            }
         }
 
         // would not work if matrix is not cube
         // right
         if (column < this->size-1) {
-            neighbors.insert(this->matrix[row][column + 1]);
+            State<T> nr = this->matrix[row][column + 1];
+            if (nr.getCost() != -1) {
+                neighbors.insert(nr);
+            }
         }
 
         // left
         if (column > 0) {
-            neighbors.insert(this->matrix[row][column - 1]);
+            State<T> nl = this->matrix[row][column - 1];
+            if (nl.getCost() != -1) {
+                neighbors.insert(nl);
+            }
         }
 
         return neighbors;
