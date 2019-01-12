@@ -7,9 +7,10 @@ add_executable(SecondMilestone
         main.cpp
         Searcher.h
         Searchable.h
-        PriorityQueue.h
         State.h
         Solution.h
         BestFirstSearch.h
+        CommonSearcher.h
+        Matrices.h
         )
 
