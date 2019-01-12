@@ -5,6 +5,7 @@
 class CacheManager{
 public:
     virtual bool isProblemExist()=0;
+
 };
 
-#endif //SECONDMILESTONE_CACHEMANAGER_H
+#endif

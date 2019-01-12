@@ -12,5 +12,9 @@ add_executable(SecondMilestone
         MyClientHandler.h
         MyClientHandler.cpp
         CacheManager.h
+        Matrices.h
+        State.h
+        Solution.h
+        BestFirstSearch.h
         )
 
