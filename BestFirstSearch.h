@@ -3,7 +3,6 @@
 #define SECONDMILESTONE_BESTFIRSTSEARCH_H
 
 #include "CommonSearcher.h"
-
 #include <set>
 
 template <class T>
@@ -19,7 +18,7 @@ public:
 
     Solution<T> search(Searchable<T>* s) override {
 
-        // initialize member 'openQueue' (priority Queue) with A
+        // initialize member 'openQueue' (priority Queue)
         CommonSearcher<T>::addToOpenQueue(s->getInitialState());
 
         // initialize solution
