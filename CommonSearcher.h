@@ -99,7 +99,77 @@ public:
         return this->evaluatedNodes;
     }
 
+
     virtual Solution<T> search(Searchable<T>* s)=0;
+
+    stack<State<T>> getSolutionStack(Searchable<T>* a,
+            queue<State<T>> closedQueue) {
+
+        stack<State<T>> aidStack;
+        while (!closedQueue.empty()) {
+            aidStack.push(closedQueue.front());
+            closedQueue.pop();
+        }
+
+        stack<State<T>> secondStack;
+        State<T> goal = aidStack.top();
+        aidStack.pop();
+        secondStack.push(goal);
+
+        while (!aidStack.empty()) {
+            State<T> s = aidStack.top();
+            if (goal.getCameFrom()->Equals(s)) {
+                secondStack.push(s);
+                goal = s;
+            }
+            aidStack.pop();
+        }
+
+        return secondStack;
+
+    }
+
+    string getSolution(Searchable<T>* a, queue<State<T>> closedQueue) {
+
+        if (closedQueue.empty()) {
+            return "";
+        }
+
+        string solution = "{";
+
+        stack<State<T>> solutionStack = getSolutionStack(a, closedQueue);
+
+        while (!solutionStack.empty()) {
+            State<T> s = solutionStack.top();
+            solutionStack.pop();
+
+            if (!solutionStack.empty()) {
+                State<T> n = solutionStack.top();
+                if (n.getState()[0] > s.getState()[0] ) {
+                    solution += "Down, ";
+                    continue;
+                }
+                if (n.getState()[0] < s.getState()[0] ) {
+                    solution += "Up, ";
+                    continue;
+                }
+                if (n.getState()[0] == s.getState()[0] ) {
+                    if (n.getState()[1] > s.getState()[1]) {
+                        solution += "Right, ";
+                        continue;
+                    }
+                    solution += "Left, ";
+                }
+            }
+        }
+
+        solution = solution.substr(0, solution.size()-2);
+        solution+= "}";
+
+        return solution;
+    }
+
+
 
 };
 

@@ -37,7 +37,7 @@ public:
             // check if the current state is the goal.
             // if yes return path (or path cost)
             if (n->Equals(s->isStateGoal(*n))) {
-                sol.setSolution(getSolution(s));
+                sol.setSolution(CommonSearcher<T>::getSolution(s, this->closedQueue));
                 return sol;
             }
 
@@ -89,72 +89,6 @@ public:
             }
         }
         return false;
-    }
-
-    stack<State<T>> getSolutionStack(Searchable<T>* a) {
-
-        stack<State<T>> aidStack;
-        while (!this->closedQueue.empty()) {
-            aidStack.push(this->closedQueue.front());
-            this->closedQueue.pop();
-        }
-
-        stack<State<T>> secondStack;
-        State<T> goal = aidStack.top();
-        aidStack.pop();
-        secondStack.push(goal);
-
-        while (!aidStack.empty()) {
-            State<T> s = aidStack.top();
-            if (goal.getCameFrom()->Equals(s)) {
-                secondStack.push(s);
-                goal = s;
-            }
-            aidStack.pop();
-        }
-
-        return secondStack;
-
-    }
-
-    string getSolution(Searchable<T>* a) {
-
-        if (this->closedQueue.empty()) {
-            return "";
-        }
-
-        string solution = "{";
-
-        stack<State<T>> solutionStack = getSolutionStack(a);
-
-        while (!solutionStack.empty()) {
-            State<T> s = solutionStack.top();
-            solutionStack.pop();
-
-            if (!solutionStack.empty()) {
-                State<T> n = solutionStack.top();
-                if (n.getState()[0] > s.getState()[0] ) {
-                    solution += "Down, ";
-                    continue;
-                }
-                if (n.getState()[0] < s.getState()[0] ) {
-                    solution += "Up, ";
-                    continue;
-                }
-                if (n.getState()[0] == s.getState()[0] ) {
-                    if (n.getState()[1] > s.getState()[1]) {
-                        solution += "Right, ";
-                        continue;
-                    }
-                    solution += "Left, ";
-                }
-            }
-        }
-
-        solution = solution.substr(0, solution.size()-2);
-        solution+= "}";
-
-        return solution;
     }
 
 };
