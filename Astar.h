@@ -51,7 +51,7 @@ public:
 
                 State<T>* neighbor = new State<T>(cState);
 
-                bool isStateInClosed = isStateInClosedQueue(*neighbor);
+                bool isStateInClosed = CommonSearcher<T>::isStateInClosedQueue(*neighbor, this->closedQueue);
                 bool isStateInOpen = CommonSearcher<T>::isStateInOpenQueue(*neighbor);
 
                 double tentative = this->cleanCostMap[n->getState()] + neighbor->getCost();
@@ -100,19 +100,6 @@ public:
 
         return sqrt(pow((goalX-currentX),2) + pow((goalY-currentY),2));
 
-    }
-
-    bool isStateInClosedQueue(State<T> s) {
-        queue<State<T>> temp = this->closedQueue;
-        while (!temp.empty()) {
-            if (s.Equals(temp.front())) {
-                return true;
-            }
-            else {
-                temp.pop();
-            }
-        }
-        return false;
     }
 
 };

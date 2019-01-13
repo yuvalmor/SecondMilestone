@@ -23,6 +23,19 @@ public:
         this->evaluatedNodes=0;
     };
 
+    bool isStateInClosedQueue(State<T> s, queue<State<T>> closedQueue) {
+        queue<State<T>> temp = closedQueue;
+        while (!temp.empty()) {
+            if (s.Equals(temp.front())) {
+                return true;
+            }
+            else {
+                temp.pop();
+            }
+        }
+        return false;
+    }
+
     bool isStateInOpenQueue(State<T> s) {
 
         priority_queue<State<T>> temp;

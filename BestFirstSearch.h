@@ -49,7 +49,7 @@ public:
 
                 // check if 'currentState' is in openQueue or closedSet
                 bool isStateInOpen = CommonSearcher<T>::isStateInOpenQueue(cState);
-                bool isStateInClosed = isStateInClosedQueue(cState);
+                bool isStateInClosed = CommonSearcher<T>::isStateInClosedQueue(cState, this->closedQueue);
 
                 if (!isStateInClosed && !isStateInOpen) {
 
@@ -78,18 +78,6 @@ public:
         return sol;
     }
 
-    bool isStateInClosedQueue(State<T> s) {
-        queue<State<T>> temp = this->closedQueue;
-        while (!temp.empty()) {
-            if (s.Equals(temp.front())) {
-                return true;
-            }
-            else {
-                temp.pop();
-            }
-        }
-        return false;
-    }
 
 };
 
