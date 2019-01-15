@@ -8,8 +8,10 @@
 #include "DepthFirstSearch.h"
 #include "Astar.h"
 #include "Solution.h"
+#include <math.h>
 #include <iostream>
 #include <cstdlib>
+#include <fstream>
 #include <ctime>
 
 #define NUM_RUN 1
@@ -30,7 +32,6 @@ private:
     // num of run times per matrix
     int runNumber;
 
-
 public:
 
     // ctor
@@ -41,7 +42,12 @@ public:
         this->numMatrices = NUM_MATRICES;
         this->runNumber = NUM_RUN;
 
+        // delete prior files from memory
+        remove("graphs.txt");
+        remove("solution.txt");
+
     }
+
 
     // function operation - runs the algorithms over the
     // generated designed matrices
@@ -49,6 +55,12 @@ public:
 
         // set random operation to time measuring
         srand(time(0));
+
+        // file writers
+        ofstream graphsFile("graphs.txt", ios::app);
+        ofstream solutionFile("solution.txt", ios::app);
+        graphsFile << NUM_MATRICES << endl;
+
 
         // running the algorithms over X matrices
         int differentMatricesCounter=1;
@@ -66,10 +78,14 @@ public:
                 // values initialization
                 matrix = matrixValuesInitialization(matrix);
 
+                // write problem to file
+                writeProblemToFile(matrix, &graphsFile);
+
                 // run algorithms
                 runAlgorithms(matrix,
                               differentMatricesCounter,
-                              specificMatrixRunCounter);
+                              specificMatrixRunCounter,
+                              &solutionFile);
 
                 specificMatrixRunCounter++;
             }
@@ -80,6 +96,28 @@ public:
             this->width = this->width + 5;
         }
 
+
+        graphsFile.close();
+        solutionFile.close();
+
+
+    }
+
+    void writeProblemToFile(const vector<vector<double>>& matrix,
+                                ostream* graphs) {
+
+        *graphs << this->height << "," << this->width << endl;
+        *graphs << "0,0" << endl;
+        *graphs << this->height-1 << "," << this->width-1 << endl;
+        for (int i = 0; i < this->height; i++) {
+            for (int j = 0; j < this->width; j++) {
+                if (j != this->width-1) {
+                    *graphs << matrix[i][j] << ",";
+                } else {
+                    *graphs << matrix[i][j] << endl;
+                }
+            }
+        }
     }
 
     // size initialization
@@ -96,12 +134,17 @@ public:
         for (int i = 0; i < this->height; i++) {
             for (int j = 0; j < this->width; j++) {
 
+                if (abs(i-j) <= 1) {
+                    matrix[i][j] = double(1);
+                    continue;
+                }
+
                 // generate random between 0 and matrix size
                 double num = rand()%this->height;
 
                 // inserting walls
-                int zeroChance = 1+(rand()%20);
-                if (zeroChance == 1 ) {
+                int zeroChance = 1+(rand()%5);
+                if (zeroChance == 1) {
                     matrix[i][j] = double(-1);
                 } else {
                     matrix[i][j] = num;
@@ -112,14 +155,23 @@ public:
         return matrix;
     }
 
-    void runAlgorithms(vector<vector<double>> matrix,
+    void writeSolutionToFile(CommonSearcher<vector<int>>* s,
+                            ostream* solution) {
+
+        *solution << s->getChosenPathCost() << "," <<
+          s->getNumberOfNodesEvaluated() << endl;
+
+    }
+
+    void runAlgorithms(const vector<vector<double>>& matrix,
                        int differentMatricesCounter,
-                       int specificMatrixRunCounter) {
+                       int specificMatrixRunCounter,
+                       ostream* solution) {
 
         // start + goal initialization - two ends of matrix
         vector<int> initial;
-        initial.push_back(1);
-        initial.push_back(1);
+        initial.push_back(0);
+        initial.push_back(0);
         vector<int> goal;
         goal.push_back(this->height - 1);
         goal.push_back(this->width - 1);
@@ -128,67 +180,37 @@ public:
         Searchable<vector<int>> *m = new MatricesProblem<vector<int>>(matrix, initial, goal);
 
         // creating and running algorithms
-        CommonSearcher<vector<int>> *s1 = new Aster<vector<int>>();
-        Solution<vector<int>> solution1 = s1->search(m);
 
-        CommonSearcher<vector<int>> *s2 = new BestFirstSearch<vector<int>>();
-        Solution<vector<int>> solution2 = s2->search(m);
+        CommonSearcher<vector<int>> *s1 = new BestFirstSearch<vector<int>>();
+        Solution<vector<int>> solution2 = s1->search(m);
+
+        CommonSearcher<vector<int>> *s2 = new DepthFirstSearch<vector<int>>();
+        Solution<vector<int>> solution4 = s2->search(m);
 
         CommonSearcher<vector<int>> *s3 = new BreadthFirstSearch<vector<int>>();
         Solution<vector<int>> solution3 = s3->search(m);
 
-        CommonSearcher<vector<int>> *s4 = new DepthFirstSearch<vector<int>>();
-        Solution<vector<int>> solution4 = s4->search(m);
+        CommonSearcher<vector<int>> *s4 = new Aster<vector<int>>();
+        Solution<vector<int>> solution1 = s4->search(m);
 
-        cout << "matrix number " <<
-             differentMatricesCounter << ", run number " <<
-             specificMatrixRunCounter << ", " <<
-             "Astar path cost: " <<
-             s1->getChosenPathCost() << endl;
+        // write solutions to file
+        writeSolutionToFile(s1, solution);
+        writeSolutionToFile(s2, solution);
+        writeSolutionToFile(s3, solution);
+        writeSolutionToFile(s4, solution);
 
-        cout << "matrix number " <<
-             differentMatricesCounter << ", run number " <<
-             specificMatrixRunCounter << ", " <<
-             "BestFirstSearch path cost: " <<
-             s2->getChosenPathCost() << endl;
+        cout << "Astar solution : " << solution4.getSolution() << endl;
 
-        cout << "matrix number " <<
-             differentMatricesCounter << ", run number " <<
-             specificMatrixRunCounter << ", " <<
-             "BreadthFirstSearch path cost: " <<
-             s3->getChosenPathCost() << endl;
+        for (int i=0; i<this->height; i++) {
+            for (int j=0; j<this->width; j++) {
+                cout << matrix[i][j] << ",";
+            }
+            cout << endl;
+        }
+        cout << endl;
+        cout << endl;
 
-        cout << "matrix number " <<
-             differentMatricesCounter << ", run number " <<
-             specificMatrixRunCounter << ", " <<
-             "DepthFirstSearch path cost: " <<
-             s4->getChosenPathCost() << endl;
-
-        cout << "matrix number " <<
-             differentMatricesCounter << ", run number " <<
-             specificMatrixRunCounter << ", " <<
-             "Astar nodes evaluated: " <<
-             s1->getNumberOfNodesEvaluated() << endl;
-
-        cout << "matrix number " <<
-             differentMatricesCounter << ", run number " <<
-             specificMatrixRunCounter << ", " <<
-             "BestFirstSearch nodes evaluated: " <<
-             s2->getNumberOfNodesEvaluated() << endl;
-
-        cout << "matrix number " <<
-             differentMatricesCounter << ", run number " <<
-             specificMatrixRunCounter << ", " <<
-             "BreadthFirstSearch nodes evaluated: " <<
-             s3->getNumberOfNodesEvaluated() << endl;
-
-        cout << "matrix number " <<
-             differentMatricesCounter << ", run number " <<
-             specificMatrixRunCounter << ", " <<
-             "DepthFirstSearch nodes evaluated: " <<
-             s4->getNumberOfNodesEvaluated() << endl;
     }
-
 };
 
 

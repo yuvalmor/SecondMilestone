@@ -13,7 +13,7 @@ private:
 
     // queue for processed nodes.
     queue<State<T>> closedQueue;
-    // map for dry weight of nodes (no heurstic)
+    // map for dry weight of nodes (no heuristic)
     map<T, double> cleanCostMap;
 
 public:
@@ -43,8 +43,14 @@ public:
 
             // check if we have come to goal node and return solution
             if (n->Equals(s->isStateGoal(*n))) {
-                CommonSearcher<T>::setChosenPathWeight(this->cleanCostMap[n->getState()]);
+
                 sol.setSolution(CommonSearcher<T>::getSolution(s,this->closedQueue));
+                string solutionString = sol.getSolution();
+                if (solutionString.empty()) {
+                    CommonSearcher<T>::setChosenPathWeight(-1);
+                } else {
+                    CommonSearcher<T>::setChosenPathWeight(this->cleanCostMap[n->getState()]);
+                }
                 return sol;
             }
 

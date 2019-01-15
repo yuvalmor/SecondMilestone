@@ -25,7 +25,7 @@ public:
 
     string getSolution() {
         if (this->solution.size() == 0) {
-            this->solution = "no path from initial to goal";
+            this->solution = "";
         }
         return this->solution;
     }

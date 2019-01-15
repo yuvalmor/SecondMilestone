@@ -57,9 +57,14 @@ public:
             // check if we have come to goal node and return solution
             if (n->Equals(s->isStateGoal(*n))) {
 
-                CommonSearcher<T>::setChosenPathWeight(n->getCost());
                 this->pathStack.push(*n);
                 sol.setSolution(getSolution());
+                string solutionString = sol.getSolution();
+                if (solutionString.empty()) {
+                    CommonSearcher<T>::setChosenPathWeight(-1);
+                } else {
+                    CommonSearcher<T>::setChosenPathWeight(n->getCost());
+                }
                 return sol;
             }
 
@@ -100,7 +105,7 @@ public:
 
         // for the empty stack there is no path
         if (this->theStack.empty()) {
-            return "no path from initial to goal";
+            return "";
         }
 
         // pushing the goal to the solution stack

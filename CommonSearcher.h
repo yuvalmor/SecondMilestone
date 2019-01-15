@@ -266,13 +266,12 @@ public:
     string getSolution(Searchable<T>* a, queue<State<T>> closedQueue) {
 
         if (closedQueue.empty()) {
-            return "no path from initial to goal";
+            return "";
         }
 
         stack<State<T>> solutionStack = getSolutionStack(a, closedQueue);
 
         return calculateBackTrace(solutionStack);
-
 
     }
 

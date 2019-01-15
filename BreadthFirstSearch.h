@@ -36,9 +36,16 @@ public:
 
             // check if we have come to goal node and return solution
             if (n->Equals(s->isStateGoal(*n))) {
-                CommonSearcher<T>::setChosenPathWeight(n->getCost());
+
                 sol.setSolution(CommonSearcher<T>::getSolution(s, this->closedQueue));
-                return sol;
+                string solutionString = sol.getSolution();
+                if (solutionString.empty()) {
+                    CommonSearcher<T>::setChosenPathWeight(-1);
+                } else{
+                    CommonSearcher<T>::setChosenPathWeight(n->getCost());
+                }
+
+               return sol;
             }
 
             // get the neighbors of 'n'
