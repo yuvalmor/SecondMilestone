@@ -2,7 +2,6 @@
 #ifndef SECONDMILESTONE_SOLUTION_H
 #define SECONDMILESTONE_SOLUTION_H
 
-
 #include <list>
 #include <queue>
 #include <string>
@@ -26,7 +25,7 @@ public:
 
     string getSolution() {
         if (this->solution.size() == 0) {
-            this->solution = "{}";
+            this->solution = "no path from initial to goal";
         }
         return this->solution;
     }
@@ -35,6 +34,7 @@ public:
         this->solution = solution;
     }
 };
+
 
 
 #endif //SECONDMILESTONE_SOLUTION_H
