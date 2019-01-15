@@ -17,7 +17,7 @@ public:
     // return the number of evaluated nodes
     virtual int getNumberOfNodesEvaluated()=0;
 
-    // search a path from initial to goal
+    // search a path from initial to goal.
     virtual Solution<T> search(Searchable<T>* s)=0;
 
 };

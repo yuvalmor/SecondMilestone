@@ -100,12 +100,13 @@ public:
                 double num = rand()%this->height;
 
                 // inserting walls
-                int zeroChance = 1+(rand()%10);
+                int zeroChance = 1+(rand()%20);
                 if (zeroChance == 1 ) {
                     matrix[i][j] = double(-1);
                 } else {
                     matrix[i][j] = num;
                 }
+
             }
         }
         return matrix;

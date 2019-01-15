@@ -11,7 +11,7 @@ class BestFirstSearch: public CommonSearcher<T> {
 
 private:
 
-    // queue for processed nodes
+    // queue for processed nodes.
     queue<State<T>> closedQueue;
 
 public:

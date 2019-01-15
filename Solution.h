@@ -2,9 +2,9 @@
 #ifndef SECONDMILESTONE_SOLUTION_H
 #define SECONDMILESTONE_SOLUTION_H
 
+#include <string>
 #include <list>
 #include <queue>
-#include <string>
 
 #include "State.h"
 

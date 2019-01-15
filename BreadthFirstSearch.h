@@ -16,7 +16,7 @@ public:
     // ctor
     BreadthFirstSearch<T>():CommonSearcher<T>(){}
 
-    // searching for some path from initial to goal node
+    // searching for some path from initial to goal node.
     Solution<T> search(Searchable<T>* s) override {
 
         // adding the initial node to the open queue

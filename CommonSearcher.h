@@ -262,7 +262,7 @@ public:
         return solution.substr(0, solution.size()-2);
     }
 
-    // return the path solution in a string formation
+    // return the path solution in a string formation.
     string getSolution(Searchable<T>* a, queue<State<T>> closedQueue) {
 
         if (closedQueue.empty()) {

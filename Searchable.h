@@ -20,7 +20,7 @@ protected:
 
 public:
 
-    // return initial state
+    // return initial state.
     virtual State<T> getInitialState()=0;
 
     // return goal state

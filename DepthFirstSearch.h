@@ -120,7 +120,7 @@ public:
             this->pathStack.pop();
         }
 
-        // set directions
+        // set directions.
         return CommonSearcher<T>::calculateBackTrace(solutionStack);
     }
 

@@ -62,7 +62,7 @@ bool State<T>::Equals(State<T> s) {
     return (this->state == s.state) ;
 }
 
-// operator overloading for priority queue based on cost
+// operator overloading for priority queue based on cost.
 template <class T>
 bool operator<(State<T> a, State<T> b) {
     return a.getCost() > b.getCost();

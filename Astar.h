@@ -11,7 +11,7 @@ class Aster : public CommonSearcher<T> {
 
 private:
 
-    // queue for processed nodes
+    // queue for processed nodes.
     queue<State<T>> closedQueue;
     // map for dry weight of nodes (no heurstic)
     map<T, double> cleanCostMap;

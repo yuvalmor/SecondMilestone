@@ -16,7 +16,7 @@ private:
 
 public:
 
-    // ctor - initialize matrix size and values
+    // ctor - initialize matrix size and values.
     MatricesProblem(const vector<vector<double>>& input, T initial, T goal) {
 
         this->height = (int)input.size();
