@@ -17,10 +17,13 @@ private:
 public:
 
     // ctor
-    BestFirstSearch<T>():CommonSearcher<T>(){}
+    //BestFirstSearch<T>():CommonSearcher<T>(){}
 
     // searching for the cheapest path from initial to goal node
     Solution<T> search(Searchable<T>* s) override {
+
+        // list of memory allocated
+        list<State<T>*> memoryHandle;
 
         // adding the initial node to the open queue
         CommonSearcher<T>::addToOpenQueue(s->getInitialState());
@@ -33,6 +36,8 @@ public:
 
             // get the best state from the queue to 'n' (and remove from open)
             State<T>* n = new State<T>(CommonSearcher<T>::popOpenQueue());
+
+            memoryHandle.push_back(n);
 
             // push current best node to closed queue
             this->closedQueue.push(*n);
@@ -47,6 +52,8 @@ public:
                 } else {
                     CommonSearcher<T>::setChosenPathWeight(n->getCost());
                 }
+
+                CommonSearcher<T>::freeMemory(memoryHandle);
                 return sol;
 
             }
@@ -96,6 +103,9 @@ public:
 
             }
         }
+
+        CommonSearcher<T>::freeMemory(memoryHandle);
+
         return sol;
     }
 

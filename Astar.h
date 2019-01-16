@@ -7,7 +7,7 @@
 #include <set>
 
 template <class T>
-class Aster : public CommonSearcher<T> {
+class Astar : public CommonSearcher<T> {
 
 private:
 
@@ -18,16 +18,18 @@ private:
 
 public:
 
-    // ctor
-    Aster<T>():CommonSearcher<T>(){}
 
     // searching for the cheapest path from initial to goal node
     Solution<T> search(Searchable<T>* s) override {
+
+        // list of memory allocated
+        list<State<T>*> memoryHandle;
 
         // adding the initial node to the open queue
         State<T>* initial = new State<T>(s->getInitialState());
         this->cleanCostMap[initial->getState()] = initial->getCost();
         CommonSearcher<T>::addToOpenQueue(*initial);
+        memoryHandle.push_back(initial);
 
         // initialize solution
         Solution<T> sol;
@@ -37,6 +39,7 @@ public:
 
             // get the best state from the queue to 'n' (and remove from open)
             State<T>* n = new State<T>(CommonSearcher<T>::popOpenQueue());
+            memoryHandle.push_back(n);
 
             // push current best node to closed queue
             this->closedQueue.push(*n);
@@ -51,6 +54,9 @@ public:
                 } else {
                     CommonSearcher<T>::setChosenPathWeight(this->cleanCostMap[n->getState()]);
                 }
+
+                CommonSearcher<T>::freeMemory(memoryHandle);
+
                 return sol;
             }
 
@@ -61,6 +67,7 @@ public:
             for (State<T> cState : neighbors) {
 
                 State<T>* neighbor = new State<T>(cState);
+                memoryHandle.push_back(neighbor);
 
                 // checking if neighbor is in closed or open queue
                 bool isStateInClosed = CommonSearcher<T>::isStateInClosedQueue(*neighbor, this->closedQueue);
@@ -105,6 +112,7 @@ public:
             }
         }
 
+        CommonSearcher<T>::freeMemory(memoryHandle);
         return sol;
 
     }
@@ -134,6 +142,9 @@ public:
 
     }
 
+
 };
+
+
 
 #endif //SECONDMILESTONE_ASTAR_H

@@ -4,6 +4,7 @@
 
 #include <queue>
 #include <stack>
+#include <list>
 #include "Searcher.h"
 
 using namespace std;
@@ -111,36 +112,51 @@ public:
         return false;
     }
 
-
     // check if we have a shorter path to s in the open queue
     bool isNewPathShorterThanOpen(State<T> s) {
+
+        list<State<T>*> memoryHandle;
 
         priority_queue<State<T>> temp = this->openQueue;
 
         while (!temp.empty()) {
-            State<T>* olderState = new State<T>(temp.top());
-            if (olderState->Equals(s)) {
-                return olderState->getCost() > s.getCost();
+
+           State<T>* olderState = new State<T>(temp.top());
+           memoryHandle.push_back(olderState);
+
+           if (olderState->Equals(s)) {
+               State<T> local = *olderState;
+               freeMemory(memoryHandle);
+               return local.getCost() > s.getCost();
             } else {
                 temp.pop();
             }
         }
 
+        freeMemory(memoryHandle);
         return false;
     }
 
     // check if we have a shorter path to s in the closed queue
     bool isNewPathShorterThanClosed(State<T> s, queue<State<T>> q) {
 
+        list<State<T>*> memoryHandle;
+
         while (!q.empty()) {
             State<T>* olderState = new State<T>(q.front());
+            memoryHandle.push_back(olderState);
+
             if (olderState->Equals(s)) {
-                return olderState->getCost() > s.getCost();
+
+                State<T> local = *olderState;
+                freeMemory(memoryHandle);
+                return local.getCost() > s.getCost();
             } else {
                 q.pop();
             }
         }
 
+        freeMemory(memoryHandle);
         return false;
     }
 
@@ -242,24 +258,24 @@ public:
             if (!solutionStack.empty()) {
                 State<T> n = solutionStack.top();
                 if (n.getState()[0] > s.getState()[0] ) {
-                    solution += "Down, ";
+                    solution += "Down,";
                     continue;
                 }
                 if (n.getState()[0] < s.getState()[0] ) {
-                    solution += "Up, ";
+                    solution += "Up,";
                     continue;
                 }
                 if (n.getState()[0] == s.getState()[0] ) {
                     if (n.getState()[1] > s.getState()[1]) {
-                        solution += "Right, ";
+                        solution += "Right,";
                         continue;
                     }
-                    solution += "Left, ";
+                    solution += "Left,";
                 }
             }
         }
 
-        return solution.substr(0, solution.size()-2);
+        return solution.substr(0, solution.size()-1);
     }
 
     // return the path solution in a string formation.
@@ -275,8 +291,16 @@ public:
 
     }
 
+    void freeMemory(list<State<T>*> list) {
 
+        while (!list.empty()) {
+            delete(list.front());
+            list.pop_front();
+        }
+    }
 
 };
+
+
 
 #endif //SECONDMILESTONE_COMMONSEARCHER_H

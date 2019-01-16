@@ -20,7 +20,10 @@ public:
     // search a path from initial to goal.
     virtual Solution<T> search(Searchable<T>* s)=0;
 
+
 };
+
+
 
 
 

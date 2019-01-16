@@ -18,9 +18,6 @@ private:
 
 public:
 
-    // ctor
-    DepthFirstSearch<T>():CommonSearcher<T>(){}
-
     // function operation - setting all the cell of the visited
     // nodes to false
     void setNodesToVisited(Searchable<T>* s) {
@@ -39,6 +36,9 @@ public:
     // searching for some path from initial to goal node
     Solution<T> search(Searchable<T>* s) {
 
+        // list of memory allocated
+        list<State<T>*> memoryHandle;
+
         Solution<T> sol;
 
         setNodesToVisited(s);
@@ -52,6 +52,9 @@ public:
 
             // get the top of the stack to n
             State<T>* n = new State<T>(theStack.top());
+
+            memoryHandle.push_back(n);
+
             CommonSearcher<T>::increaseEvaluatedNodes();
 
             // check if we have come to goal node and return solution
@@ -65,6 +68,8 @@ public:
                 } else {
                     CommonSearcher<T>::setChosenPathWeight(n->getCost());
                 }
+
+                CommonSearcher<T>::freeMemory(memoryHandle);
                 return sol;
             }
 
@@ -97,6 +102,10 @@ public:
             }
 
         }
+
+        CommonSearcher<T>::freeMemory(memoryHandle);
+
+        return sol;
     }
 
     // function operation - create the back track from goal
@@ -128,6 +137,7 @@ public:
         // set directions.
         return CommonSearcher<T>::calculateBackTrace(solutionStack);
     }
+
 
 
 };

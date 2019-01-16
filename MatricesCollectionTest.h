@@ -15,7 +15,10 @@
 #include <ctime>
 
 #define NUM_RUN 1
-#define NUM_MATRICES 10
+#define NUM_MATRICES 5
+#define SIZE_DIFFERENCE 1
+#define PROBABILITY 4
+#define SECURE 5
 
 // checking algorithms complexity
 class MatricesCollectionTest {
@@ -92,8 +95,8 @@ public:
 
             differentMatricesCounter++;
 
-            this->height = this->height + 5;
-            this->width = this->width + 5;
+            this->height = this->height + SIZE_DIFFERENCE;
+            this->width = this->width + SIZE_DIFFERENCE;
         }
 
 
@@ -134,16 +137,17 @@ public:
         for (int i = 0; i < this->height; i++) {
             for (int j = 0; j < this->width; j++) {
 
-                if (abs(i-j) <= 1) {
-                    matrix[i][j] = double(1);
-                    continue;
-                }
-
                 // generate random between 0 and matrix size
                 double num = rand()%this->height;
 
-                // inserting walls
-                int zeroChance = 1+(rand()%5);
+                if ((i < SECURE && j<SECURE) ||
+                ((j > this->width - SECURE) && (i > this->height - SECURE))) {
+                    matrix[i][j] = num;
+                    continue;
+                }
+
+                // inserting walls in probability of 1:4
+                int zeroChance = 1+(rand()%PROBABILITY);
                 if (zeroChance == 1) {
                     matrix[i][j] = double(-1);
                 } else {
@@ -159,7 +163,7 @@ public:
                             ostream* solution) {
 
         *solution << s->getChosenPathCost() << "," <<
-          s->getNumberOfNodesEvaluated() << endl;
+                  s->getNumberOfNodesEvaluated() << endl;
 
     }
 
@@ -182,16 +186,16 @@ public:
         // creating and running algorithms
 
         CommonSearcher<vector<int>> *s1 = new BestFirstSearch<vector<int>>();
-        Solution<vector<int>> solution2 = s1->search(m);
+        Solution<vector<int>> solution1 = s1->search(m);
 
         CommonSearcher<vector<int>> *s2 = new DepthFirstSearch<vector<int>>();
-        Solution<vector<int>> solution4 = s2->search(m);
+        Solution<vector<int>> solution2 = s2->search(m);
 
         CommonSearcher<vector<int>> *s3 = new BreadthFirstSearch<vector<int>>();
         Solution<vector<int>> solution3 = s3->search(m);
 
-        CommonSearcher<vector<int>> *s4 = new Aster<vector<int>>();
-        Solution<vector<int>> solution1 = s4->search(m);
+        CommonSearcher<vector<int>> *s4 = new Astar<vector<int>>();
+        Solution<vector<int>> solution4 = s4->search(m);
 
         // write solutions to file
         writeSolutionToFile(s1, solution);
@@ -199,16 +203,12 @@ public:
         writeSolutionToFile(s3, solution);
         writeSolutionToFile(s4, solution);
 
-        cout << "Astar solution : " << solution4.getSolution() << endl;
-
-        for (int i=0; i<this->height; i++) {
-            for (int j=0; j<this->width; j++) {
-                cout << matrix[i][j] << ",";
-            }
-            cout << endl;
-        }
-        cout << endl;
-        cout << endl;
+        // free allocations
+        delete(m);
+        delete(s1);
+        delete(s2);
+        delete(s3);
+        delete(s4);
 
     }
 };

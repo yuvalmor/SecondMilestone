@@ -4,6 +4,7 @@
 
 #include <set>
 #include <vector>
+#include <iostream>
 #include "State.h"
 
 using namespace std;
@@ -34,8 +35,8 @@ public:
         return this->matrix;
     }
 
-    // need to implement something in hash set
 };
+
 
 
 #endif //SECONDMILESTONE_SEARCHABLE_H
