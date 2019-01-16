@@ -3,13 +3,14 @@
 #define SECONDMILESTONE_BESTFIRSTSEARCH_H
 
 #include "CommonSearcher.h"
-
 #include <set>
 
 template <class T>
 class BestFirstSearch: public CommonSearcher<T> {
 
 private:
+
+    // queue for processed nodes.
     queue<State<T>> closedQueue;
 
 public:
@@ -17,10 +18,14 @@ public:
     // ctor
     BestFirstSearch<T>():CommonSearcher<T>(){}
 
+    // searching for the cheapest path from initial to goal node
     Solution<T> search(Searchable<T>* s) override {
 
-        // initialize member 'openQueue' (priority Queue) with A
+        // adding the initial node to the open queue
         CommonSearcher<T>::addToOpenQueue(s->getInitialState());
+
+        // initialize solution
+        Solution<T> sol;
 
         // loop over openQueue states
         while (CommonSearcher<T>::openQueueSize() > 0) {
@@ -28,134 +33,65 @@ public:
             // get the best state from the queue to 'n' (and remove from open)
             State<T>* n = new State<T>(CommonSearcher<T>::popOpenQueue());
 
-            // add the n state to the set
-            //CommonSearcher<T>::addStateToSet(n);
+            // push current best node to closed queue
             this->closedQueue.push(*n);
 
-            // check if the current state is the goal.
-            // if yes return path (or path cost)
+            // check if we have come to goal node and return solution
             if (n->Equals(s->isStateGoal(*n))) {
-                Solution<T> sol;
-                sol.setSolution(getSolution(s));
+                CommonSearcher<T>::setChosenPathWeight(n->getCost());
+                sol.setSolution(CommonSearcher<T>::getSolution(s, this->closedQueue));
                 return sol;
             }
 
             // get the neighbors of 'n'
-            set<State<T>> neighbors = s->getAllPossibleStates(*n);
+            multiset<State<T>> neighbors = s->getAllPossibleStates(*n);
 
             // loop over 'n'/s neighbors
-            for (auto cState : neighbors) {
+            for (auto neighbor : neighbors) {
 
-                // check if 'currentState' is in openQueue or closedSet
-                bool isStateInOpen = CommonSearcher<T>::isStateInOpenQueue(cState);
-                bool isStateInClosed = isStateInClosedQueue(cState);
+                // check if 'neighbor' is in openQueue or closedSet
+                bool isStateInOpen = CommonSearcher<T>::isStateInOpenQueue(neighbor);
+                bool isStateInClosed = CommonSearcher<T>::isStateInClosedQueue(neighbor, this->closedQueue);
 
+                // treat new neighbor we have not yet met
                 if (!isStateInClosed && !isStateInOpen) {
 
-                    // update that you came to currentState from 'n'
-                    // and update the cost, then add currentState to
-                    // to the openQueue
+                    // set that we have come ti neighbor from n
+                    neighbor.setCameFrom(n);
 
-                    cState.setCameFrom(n);
-                    cState.setCost(cState.getPathCost());
+                    // set the path cost to neighbor throw n
+                    neighbor.setCost(neighbor.getPathCost());
 
-                    CommonSearcher<T>::addToOpenQueue(cState);
+                    // add neighbor to the open queue
+                    CommonSearcher<T>::addToOpenQueue(neighbor);
 
-                    // move on to next neighbor
                     continue;
                 }
 
-                cState.setCameFrom(n);
-                cState.setCost(cState.getPathCost());
+                neighbor.setCameFrom(n);
+                neighbor.setCost(neighbor.getPathCost());
 
-                if (CommonSearcher<T>::isNewPathShorter(cState)) {
-                    CommonSearcher<T>::updateOpenQueue(cState);
-                }
+                // check if this new path to neighbor throw n is better than
+                // path we already have
+                if (CommonSearcher<T>::isNewPathShorterThanOpen(neighbor) ||
+                    CommonSearcher<T>::isNewPathShorterThanClosed(neighbor, this->closedQueue)) {
 
-            }
-        }
-    }
-
-    bool isStateInClosedQueue(State<T> s) {
-        queue<State<T>> temp = this->closedQueue;
-        while (!temp.empty()) {
-            if (s.Equals(temp.front())) {
-                return true;
-            }
-            else {
-                temp.pop();
-            }
-        }
-        return false;
-    }
-
-    stack<State<T>> getSolutionStack(Searchable<T>* a) {
-
-        stack<State<T>> aidStack;
-        while (!this->closedQueue.empty()) {
-            aidStack.push(this->closedQueue.front());
-            this->closedQueue.pop();
-        }
-
-        stack<State<T>> secondStack;
-        State<T> goal = aidStack.top();
-        aidStack.pop();
-        secondStack.push(goal);
-
-        while (!aidStack.empty()) {
-            State<T> s = aidStack.top();
-            if (goal.getCameFrom()->Equals(s)) {
-                secondStack.push(s);
-                goal = s;
-            }
-            aidStack.pop();
-        }
-
-        return secondStack;
-
-    }
-
-    string getSolution(Searchable<T>* a) {
-
-        if (this->closedQueue.empty()) {
-            return "";
-        }
-
-        string solution = "{";
-
-        stack<State<T>> solutionStack = getSolutionStack(a);
-
-        while (!solutionStack.empty()) {
-            State<T> s = solutionStack.top();
-            solutionStack.pop();
-
-            if (!solutionStack.empty()) {
-                State<T> n = solutionStack.top();
-                if (n.getState()[0] > s.getState()[0] ) {
-                    solution += "Down, ";
-                    continue;
-                }
-                if (n.getState()[0] < s.getState()[0] ) {
-                    solution += "Up, ";
-                    continue;
-                }
-                if (n.getState()[0] == s.getState()[0] ) {
-                    if (n.getState()[1] > s.getState()[1]) {
-                        solution += "Right, ";
-                        continue;
+                    // if neighbor is not in open list we add it
+                    if (!isStateInOpen) {
+                        CommonSearcher<T>::addToOpenQueue(neighbor);
+                    } else {
+                        // if neighbor is in open list we update it's priority
+                        CommonSearcher<T>::updateOpenQueue(neighbor);
                     }
-                    solution += "Left, ";
+
                 }
+
             }
         }
-
-        solution = solution.substr(0, solution.size()-2);
-        solution+= "}";
-
-        return solution;
+        return sol;
     }
+
 
 };
 
-
-#endif //SECONDMILESTONE_BESTFIRSTSEARCH_H
+#endif

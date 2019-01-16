@@ -11,11 +11,8 @@ using namespace std;
 class MySerialServer:public Server{
     bool toListen;
 public:
-    //
     void open(int port, ClientHandler* clientHandler) override;
-    //
     void stop()override;
-    //
 };
 
 #endif

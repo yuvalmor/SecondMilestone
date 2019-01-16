@@ -10,15 +10,16 @@
 #include <netinet/in.h>
 #include "ClientHandler.h"
 
+/**
+ * namespace - server side
+ */
 namespace server_side{
     class Server{
     public:
+        // open the server
         virtual void open(int portNum,ClientHandler* clientHandler)=0;
+        // close the server
         virtual void stop()=0;
-        void Error(const char* errorMassage){
-            perror(errorMassage);
-            exit(1);
-        }
     };
 }
 

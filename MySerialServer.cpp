@@ -1,4 +1,4 @@
-#define BUFFER_SIZE 256
+/*#define BUFFER_SIZE 256
 #include "MySerialServer.h"
 #include <chrono>
 
@@ -23,10 +23,8 @@ void MySerialServer::open(int portNum, ClientHandler* clientHandler) {
     if(bind(sockfd,(struct sockaddr*)&serv_addr, sizeof(serv_addr))<0){
         Error("Error in binding");
     }
-
-
     // until here we opened the server and the sockets!!!!!!!!!!!!
-    listen(sockfd,1);
+    listen(sockfd,SOMAXCONN);
     clilen = sizeof(cli_addr);
     newsockfd = accept(sockfd,(struct sockaddr*)&cli_addr,(socklen_t*)&clilen);
     if(newsockfd < 0){
@@ -41,12 +39,13 @@ void MySerialServer::open(int portNum, ClientHandler* clientHandler) {
     timeout.tv_sec = 5;
     timeout.tv_usec = 0;
     while (this->toListen && select(sockfd+1,&fs, nullptr, nullptr,&timeout)){
+        cout << "im inside the while loop" <<endl;
         newsockfd = accept(sockfd,(struct sockaddr*)&cli_addr,(socklen_t*)&clilen);
         if(newsockfd < 0){
             close(sockfd);
             if(errno == EWOULDBLOCK){
                 this->stop();
-                Error("Time out! \n");
+                Error("Time out!");
             }
             Error("Error on accept");
         }
@@ -58,4 +57,4 @@ void MySerialServer::open(int portNum, ClientHandler* clientHandler) {
 
 void MySerialServer::stop() {
     this->toListen = false;
-}
+}*/
