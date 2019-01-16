@@ -12,12 +12,17 @@ class DepthFirstSearch: public CommonSearcher<T> {
 
 private:
 
+<<<<<<< HEAD
+=======
+    // members
+>>>>>>> origin/master
     stack<State<T>> theStack;
     stack<State<T>> pathStack;
     map<T, bool> visited;
 
 public:
 
+<<<<<<< HEAD
     // ctor
     DepthFirstSearch<T>():CommonSearcher<T>(){}
 
@@ -27,6 +32,13 @@ public:
 
         vector<vector<State<T>>> structure = s->returnStructure();
 
+=======
+    // function sets all the cells of the visited
+    // nodes map to false, uses the structure of the problem
+    void setNodesToVisited(Searchable<T>* s) {
+
+        vector<vector<State<T>>> structure = s->returnStructure();
+>>>>>>> origin/master
         for(int i=0; i<structure.size(); i++) {
             vector<State<T>> row = structure[i];
             for( int j=0; j<row.size(); j++) {
@@ -39,8 +51,17 @@ public:
     // searching for some path from initial to goal node
     Solution<T> search(Searchable<T>* s) {
 
+<<<<<<< HEAD
         Solution<T> sol;
 
+=======
+        // list of memory allocated
+        list<State<T>*> memoryHandle;
+
+        Solution<T> sol;
+
+        // set nodes to false
+>>>>>>> origin/master
         setNodesToVisited(s);
 
         // push the initial node to the stack
@@ -52,14 +73,38 @@ public:
 
             // get the top of the stack to n
             State<T>* n = new State<T>(theStack.top());
+<<<<<<< HEAD
+=======
+            memoryHandle.push_back(n);
+
+            // by 1
+>>>>>>> origin/master
             CommonSearcher<T>::increaseEvaluatedNodes();
 
             // check if we have come to goal node and return solution
             if (n->Equals(s->isStateGoal(*n))) {
 
+<<<<<<< HEAD
                 CommonSearcher<T>::setChosenPathWeight(n->getCost());
                 this->pathStack.push(*n);
                 sol.setSolution(getSolution());
+=======
+                // create the solution path as string
+                this->pathStack.push(*n);
+                sol.setSolution(getSolution());
+                string solutionString = sol.getSolution();
+
+                // set the solution weight
+                if (solutionString.empty()) {
+                    CommonSearcher<T>::setChosenPathWeight(-1);
+                } else {
+                    CommonSearcher<T>::setChosenPathWeight(n->getCost());
+                }
+
+                // free memory and structures
+                CommonSearcher<T>::freeMemory(memoryHandle);
+                freeStacks();
+>>>>>>> origin/master
                 return sol;
             }
 
@@ -92,6 +137,27 @@ public:
             }
 
         }
+<<<<<<< HEAD
+=======
+
+        CommonSearcher<T>::freeMemory(memoryHandle);
+        freeStacks();
+        return sol;
+    }
+
+    /*
+     * function omits all the elements from the stacks
+     * and map (at the end of the run)
+     */
+    void freeStacks() {
+        this->visited.clear();
+        while(!theStack.empty()) {
+            theStack.pop();
+        }
+        while (!pathStack.empty()) {
+            pathStack.pop();
+        }
+>>>>>>> origin/master
     }
 
     // function operation - create the back track from goal
@@ -99,8 +165,13 @@ public:
     string getSolution() {
 
         // for the empty stack there is no path
+<<<<<<< HEAD
         if (this->theStack.empty()) {
             return "no path from initial to goal";
+=======
+        if (this->pathStack.empty()) {
+            return "";
+>>>>>>> origin/master
         }
 
         // pushing the goal to the solution stack
@@ -125,7 +196,15 @@ public:
     }
 
 
+<<<<<<< HEAD
 };
 
 
 #endif
+=======
+
+};
+
+
+#endif //SECONDMILESTONE_DEPTHFIRSTSEARCH_H
+>>>>>>> origin/master

@@ -1,5 +1,9 @@
 #ifndef SECONDMILESTONE_ASTAR_H
 #define SECONDMILESTONE_ASTAR_H
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 #include "CommonSearcher.h"
 #include <map>
 #include <math.h>
@@ -17,7 +21,10 @@ private:
 
 public:
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
     // searching for the cheapest path from initial to goal node
     Solution<T> search(Searchable<T>* s) override {
 
@@ -46,14 +53,26 @@ public:
             // check if we have come to goal node and return solution
             if (n->Equals(s->isStateGoal(*n))) {
 
+<<<<<<< HEAD
                 sol.setSolution(CommonSearcher<T>::getSolution(s,this->closedQueue));
                 string solutionString = sol.getSolution();
+=======
+                // set path solution as string
+                sol.setSolution(CommonSearcher<T>::getSolution(s,this->closedQueue));
+                string solutionString = sol.getSolution();
+
+                // set path total  weight
+>>>>>>> origin/master
                 if (solutionString.empty()) {
                     CommonSearcher<T>::setChosenPathWeight(-1);
                 } else {
                     CommonSearcher<T>::setChosenPathWeight(this->cleanCostMap[n->getState()]);
                 }
 
+<<<<<<< HEAD
+=======
+                // free memory and structures
+>>>>>>> origin/master
                 CommonSearcher<T>::freeMemory(memoryHandle);
                 CommonSearcher<T>::cleanQueue(&this->closedQueue);
                 this->cleanCostMap.clear();
@@ -111,6 +130,10 @@ public:
 
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         CommonSearcher<T>::freeMemory(memoryHandle);
         CommonSearcher<T>::cleanQueue(&this->closedQueue);
         return sol;
@@ -145,4 +168,10 @@ public:
 
 };
 
+<<<<<<< HEAD
 #endif
+=======
+
+
+#endif //SECONDMILESTONE_ASTAR_H
+>>>>>>> origin/master

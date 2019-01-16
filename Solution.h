@@ -2,9 +2,10 @@
 #ifndef SECONDMILESTONE_SOLUTION_H
 #define SECONDMILESTONE_SOLUTION_H
 
-#include <string>
+
 #include <list>
 #include <queue>
+#include <string>
 
 #include "State.h"
 
@@ -23,10 +24,7 @@ public:
         this->solution = "";
     }
 
-    string getSolution() {
-        if (this->solution.size() == 0) {
-            this->solution = "no path from initial to goal";
-        }
+    string getSolution() const {
         return this->solution;
     }
 
@@ -35,4 +33,5 @@ public:
     }
 };
 
-#endif
+
+#endif //SECONDMILESTONE_SOLUTION_H

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 #ifndef SECONDMILESTONE_BREADTHFIRSTSEARCH_H
 #define SECONDMILESTONE_BREADTHFIRSTSEARCH_H
 
@@ -12,12 +16,21 @@ private:
 
 public:
 
+<<<<<<< HEAD
     // ctor
     BreadthFirstSearch<T>():CommonSearcher<T>(){}
 
     // searching for some path from initial to goal node.
     Solution<T> search(Searchable<T>* s) override {
 
+=======
+    // searching for some path from initial to goal node.
+    Solution<T> search(Searchable<T>* s) override {
+
+        // list of memory allocated
+        list<State<T>*> memoryHandle;
+
+>>>>>>> origin/master
         // adding the initial node to the open queue
         CommonSearcher<T>::addToOpenRegularQueue(s->getInitialState());
 
@@ -29,15 +42,38 @@ public:
 
             // get the best state from the queue to 'n' (and remove from open)
             State<T>* n = new State<T>(CommonSearcher<T>::popOpenRegularQueue());
+<<<<<<< HEAD
+=======
+            memoryHandle.push_back(n);
+>>>>>>> origin/master
 
             // push current best node to closed queue
             this->closedQueue.push(*n);
 
             // check if we have come to goal node and return solution
             if (n->Equals(s->isStateGoal(*n))) {
+<<<<<<< HEAD
                 CommonSearcher<T>::setChosenPathWeight(n->getCost());
                 sol.setSolution(CommonSearcher<T>::getSolution(s, this->closedQueue));
                 return sol;
+=======
+
+                // set solution path as string
+                sol.setSolution(CommonSearcher<T>::getSolution(s, this->closedQueue));
+                string solutionString = sol.getSolution();
+
+                // set solution weight
+                if (solutionString.empty()) {
+                    CommonSearcher<T>::setChosenPathWeight(-1);
+                } else{
+                    CommonSearcher<T>::setChosenPathWeight(n->getCost());
+                }
+
+                // free memory
+                CommonSearcher<T>::freeMemory(memoryHandle);
+                CommonSearcher<T>::cleanQueue(&this->closedQueue);
+               return sol;
+>>>>>>> origin/master
             }
 
             // get the neighbors of 'n'
@@ -69,8 +105,22 @@ public:
 
             }
         }
+<<<<<<< HEAD
         return sol;
     }
 };
 
 #endif
+=======
+        CommonSearcher<T>::freeMemory(memoryHandle);
+        CommonSearcher<T>::cleanQueue(&this->closedQueue);
+        return sol;
+    }
+
+
+};
+
+
+
+#endif //SECONDMILESTONE_BREADTHFIRSTSEARCH_H
+>>>>>>> origin/master
